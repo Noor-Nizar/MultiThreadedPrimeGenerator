@@ -6,13 +6,13 @@ public class Program {
     static Scanner scan = new Scanner(System.in);
     public static int nThreads, n, bufsize;
     public static MyThread[] threads;
-    public static Queue<Integer> a;
+    public static int[] a;
     public static void main(String[] args) {
         n = scan.nextInt();
         nThreads = scan.nextInt();
         bufsize = scan.nextInt();
         //queue of size buffersize
-        a = new LinkedList<Integer>();
+        a = new int[bufsize];
         // initialize a list of threads using number of threads and passing constructor
         // values n, buf
         //calculate time of execution
@@ -35,8 +35,11 @@ public class Program {
             }
         }
         // print the result
-        while(!a.isEmpty()){
-            System.out.println(a.remove());
+        // while(!a.isEmpty()){
+        //     System.out.println(a.remove());
+        // }
+        for (int i = 0; i < bufsize; i++){
+            System.out.println(a[i]);
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");

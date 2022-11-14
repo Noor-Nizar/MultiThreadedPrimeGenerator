@@ -33,20 +33,19 @@ public class MyThread extends Thread {
                                 break;
                                   }
                     }
-                    // if (isprime){
-                    //     q.add(n);
-                    //     if(Producer.produce(q.peek())){
-                    //         q.remove();
-                    //     }
-                        
-                    // }
-                    Producer.produce(n, isprime, this);
+                    if (isprime){
+                        q.add(n);
+                    }
+                    if(Producer.produce(q.peek(), n, start)){
+                        q.remove();
+                    }
+                    // Producer.produce()
             }
-            // while(!q.isEmpty()){
-            //     if(Producer.produce(q.peek(), n%bufferSize)){
-            //         q.remove();
-            //     }
-            // }
+            while(!q.isEmpty()){
+                if(Producer.produce(q.peek(), n, start)){
+                    q.remove();
+                }
+            }
         }   
     }
     

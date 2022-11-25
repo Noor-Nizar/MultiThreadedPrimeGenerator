@@ -9,23 +9,26 @@ public class MyThread extends Thread {
         // constructor for class
         int start = 0;
         int end;
-        int step;
-        int bufferSize;
-        int counter;
-    
+        int remItr = 0;
+        int threadNumber;
+        boolean token = false;
+        Producer producer;
         //constructor
-        public MyThread(int start, int end, int step, int bufferSize) {
+        public MyThread(int start, int end, int threadNumber, Producer producer) {
             this.start = start;
             this.end = end;
-            this.step = step;
-            this.bufferSize = bufferSize;
-            this.counter = start;
+            this.threadNumber = threadNumber;
+            this.producer = producer;
+            if(threadNumber == 0){
+                token = true;
+            }
         }
 
 
         public void run() {
             int n;
-            for (n = start+2 ; n <= end; n+=step) {
+            for (n = start ; n < end; n++) {
+                remItr = end - n;
                 boolean isprime = true;
                     for (int j = 2; j < n; j++) {
                             if (n%j == 0){
@@ -35,18 +38,36 @@ public class MyThread extends Thread {
                     }
                     if (isprime){
                         q.add(n);
+                        if(token){
+                            if(producer.produce(q.peek(), this)){
+                                q.remove();
+                            }
+                        }
                     }
-                    if(Producer.produce(q.peek(), n, start)){
+            }
+            Program.print("thread " + threadNumber + " sleeping");
+            if(!token){
+                producer.sleepen(this);
+            }
+            Program.print("thread " + threadNumber + " wokeup");
+            while(!q.isEmpty()){
+                Program.print("Thread"+ threadNumber+" token = " + token);
+                if(token){
+                    if(producer.produce(q.peek(), this)){
                         q.remove();
                     }
-                    // Producer.produce()
-            }
-            while(!q.isEmpty()){
-                if(Producer.produce(q.peek(), n, start)){
-                    q.remove();
                 }
             }
+            producer.produce(-1, this);
         }   
     }
+
+    /*
+    0...20  
+    20...40
+    40...60
+    60...80
+    80...100
+    */
     
 

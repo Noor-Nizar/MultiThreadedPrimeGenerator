@@ -43,6 +43,8 @@ public class Hub {
             if (counter < Program.bufsize) {
                 Program.a.add(val);
                 counter++;
+                Program.Pcounter++;
+                Program.Lprime=val;
                 return true;
             } else {
                 try {

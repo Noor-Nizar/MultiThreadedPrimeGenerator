@@ -13,7 +13,7 @@ public class Consumer extends Thread {
     public Consumer(Hub hub) {
         this.hub = hub;
         try{
-            bw = new BufferedWriter(new FileWriter("output.txt", true));
+            bw = new BufferedWriter(new FileWriter(Program.FileName, true));
         }catch(IOException e){
             e.printStackTrace();
         }

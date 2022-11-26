@@ -5,32 +5,32 @@ import java.util.Scanner;
 public class Program {
     static Scanner scan = new Scanner(System.in);
     public static int nThreads, n, bufsize;
-    public static MyThread[] threads;
+    public static Producer[] producers;
     public static Queue<Integer> a;
-    public static Producer producer;
+    public static Hub hub;
     public static void main(String[] args) {
         n = scan.nextInt();
         nThreads = scan.nextInt();
         bufsize = scan.nextInt();
         //queue of size buffersize
         a = new LinkedList<Integer>();
-        // initialize a list of threads using number of threads and passing constructor
+        // initialize a list of producers using number of producers and passing constructor
         // values n, buf
         //calculate time of execution
         long startTime = System.currentTimeMillis();
-        producer = new Producer();
-        threads = new MyThread[nThreads];
+        hub = new Hub();
+        producers = new Producer[nThreads];
         for (int i = 0; i < nThreads; i++) {
-            threads[i] = new MyThread(i*n/nThreads, Math.min((i+1)*n/nThreads,n ), i, producer);
+            producers[i] = new Producer(i*n/nThreads, Math.min((i+1)*n/nThreads,n ), i, hub);
         }
-        // start all threads
+        // start all producers
         for (int i = 0; i < nThreads; i++) {
-            threads[i].start();
+            producers[i].start();
         }
-        // wait for all threads to finish
+        // wait for all producers to finish
         for (int i = 0; i < nThreads; i++) {
             try {
-                threads[i].join();
+                producers[i].join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -44,7 +44,7 @@ public class Program {
         // }
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println("Counter " + Producer.counter);
+        System.out.println("Counter " + Hub.counter);
     }
     public static void print(String x){
         System.out.println(x);

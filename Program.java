@@ -23,10 +23,14 @@ public class Program {
         for (int i = 0; i < nThreads; i++) {
             producers[i] = new Producer(i*n/nThreads, Math.min((i+1)*n/nThreads,n ), i, hub);
         }
+
+        Consumer consumer = new Consumer(hub);
+        consumer.start();
         // start all producers
         for (int i = 0; i < nThreads; i++) {
             producers[i].start();
         }
+        
         // wait for all producers to finish
         for (int i = 0; i < nThreads; i++) {
             try {
@@ -35,18 +39,34 @@ public class Program {
                 e.printStackTrace();
             }
         }
-        // print the result
-        while(!a.isEmpty()){
-            System.out.println(a.remove());
+        // wait for consumer to finish
+        consumer.work = false;
+        try {
+            consumer.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        // print the result
+        // while(!a.isEmpty()){
+        //     System.out.println(a.remove());
+        // }
         // for (int i = 0; i < bufsize; i++){
         //     System.out.println(a[i]);
         // }
+
         long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime-startTime) + "ms");
-        System.out.println("Counter " + Hub.counter);
     }
     public static void print(String x){
         System.out.println(x);
+    }
+    
+    public static void writeToFile(int x){
+        //creates a file and appends number to it
+        // System.out.println(x);
+
+
+
+
     }
 }

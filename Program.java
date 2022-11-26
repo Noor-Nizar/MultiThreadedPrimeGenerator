@@ -18,12 +18,9 @@ public class Program {
         nThreads=_nThreads;
         bufsize=_bufsize;
         FileName=_FileName;
-        //queue of size buffersize
         a = new LinkedList<Integer>();
-        // initialize a list of producers using number of producers and passing constructor
-        // values n, buf
-        //calculate time of execution
         startTime = System.currentTimeMillis();
+        Hub.reset();
         hub = new Hub();
         producers = new Producer[nThreads];
         for (int i = 0; i < nThreads; i++) {
@@ -40,6 +37,7 @@ public class Program {
             producers[i].start();
         }
         
+       
         // wait for all producers to finish
         for (int i = 0; i < nThreads; i++) {
             try {
@@ -55,6 +53,7 @@ public class Program {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        consumer.work = true;
         // print the result
         // while(!a.isEmpty()){
         //     System.out.println(a.remove());

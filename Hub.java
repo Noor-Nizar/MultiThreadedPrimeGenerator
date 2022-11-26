@@ -19,7 +19,7 @@ public class Hub {
 
     public boolean add(int val, Producer o) {
         if (!o.token) {
-            // print("exit");
+            print("exit");
             return false;
         }
         synchronized (this) {
@@ -94,5 +94,10 @@ public class Hub {
             Lock.notify();
             return q;
         }
+    }
+    public static void reset(){
+        counter = 0;
+        writing = false;
+        turnThread = 0;
     }
 }

@@ -199,6 +199,7 @@ public class NewJFrame extends javax.swing.JFrame {
         int nThreads = Integer.parseInt(jTextField2.getText());
         int bufsize = Integer.parseInt(jTextField3.getText());
         String FileName=OutputFile.getText();
+        Program.Pcounter=0;
         Program.run(n,nThreads,bufsize,FileName);
         TimeTaken.setText(String.valueOf(Program.getTime()));
         LargestPrime.setText(String.valueOf(Program.Lprime));

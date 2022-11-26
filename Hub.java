@@ -18,15 +18,13 @@ public class Hub {
     synchoPrinter sp = new synchoPrinter();
 
     public boolean add(int val, Producer o) {
+        if (!o.token) {
+            // print("exit");
+            return false;
+        }
         synchronized (this) {
-            // print("Thread " + o.threadNumber + " is trying to add " + val + " at counter
-            // " + counter
-            // +" values of which thread = " + o.start + " and end = " + o.end + " remItr" +
-            // o.remItr);
-            if (!o.token) {
-                // print("exit");
-                return false;
-            }
+            // print("Thread " + o.threadNumber + " is trying to add " + val + " at counter" + counter
+            // +" values of which thread = " + o.start + " and end = " + o.end );
             // if thread 1 finished working
 
             if (val == -1) {
@@ -39,22 +37,24 @@ public class Hub {
                 notifyAll();
                 return true;
             }
-            // Program.print("turnThread " + turnThread + " " + o.threadNumber);
+        }
+        // Program.print("turnThread " + turnThread + " " + o.threadNumber);
+        synchronized (Lock) {
             if (counter < Program.bufsize) {
                 Program.a.add(val);
                 counter++;
-                synchronized (Lock){
-                    try{print("sleeping");wait();
-                    }
-                    catch(InterruptedException e){
-                        e.printStackTrace();
-                    }
-                }
                 return true;
             } else {
+                try {
+                    // print("sleeping");
+                    Lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return false;
             }
         }
+
     }
 
     public void sleepen(Producer o) {
@@ -78,20 +78,18 @@ public class Hub {
     }
 
     public Queue<Integer> consume() {
-        print("before this");
-        synchronized (this) {
+        // print("before this");
+        synchronized (Lock) {
             Queue<Integer> q = new LinkedList<Integer>();
 
-            while(counter > 0){
+            while (counter > 0) {
                 int next = Program.a.remove();
                 q.add(next);
                 counter--;
             }
-            print("cant enter lock");
-            synchronized (Lock){
-                print("notifying all");
-                notify();
-            }
+            // print("cant enter lock");
+            // print("notifying all");
+            Lock.notify();
             return q;
         }
     }

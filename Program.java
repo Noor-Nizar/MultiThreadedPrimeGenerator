@@ -61,12 +61,4 @@ public class Program {
         System.out.println(x);
     }
     
-    public static void writeToFile(int x){
-        //creates a file and appends number to it
-        // System.out.println(x);
-
-
-
-
-    }
 }
